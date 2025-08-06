@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 namespace GestionAcademica.DTOs
 {
     public class MateriaDto
-{
-    public int Id { get; set; }
-    public string Nombre { get; set; }
-    public string Codigo { get; set; }
-    public int Creditos { get; set; }
-}
+    {
+        public int ID { get; set; }
+        public string Descripcion { get; set; }
+        public int HSSemanales { get; set; }
+        public int HSTotales { get; set; }
+        public int IDPlan { get; set; }
+    }
 }
