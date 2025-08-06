@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GestionAcademica.Domain;
 
+
 namespace GestionAcademica.DataAccess
 {
     public class MateriaInMemory
@@ -15,8 +16,8 @@ namespace GestionAcademica.DataAccess
         {
             Materias = new List<Materia>
             {
-                new Materia(1, "Matemática Discreta", "MAT101", 6),
-                new Materia(2, ".NET", "NET301", 8)
+                new Materia(1, "Matemática Discreta", 4, 64, 1),
+                new Materia(2, "Programación I", 6, 96, 1)
             };
         }
     }

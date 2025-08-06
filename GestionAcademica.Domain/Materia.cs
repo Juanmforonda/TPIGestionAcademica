@@ -8,45 +8,54 @@ namespace GestionAcademica.Domain
 {
     public class Materia
     {
-        public int Id { get; private set; }
-        public string Nombre { get; private set; }
-        public string Codigo { get; private set; }
-        public int Creditos { get; private set; }
+        public int ID { get; private set; }
+        public string Descripcion { get; private set; }
+        public int HSSemanales { get; private set; }
+        public int HSTotales { get; private set; }
+        public int IDPlan { get; private set; }
 
-        public Materia(int id, string nombre, string codigo, int creditos)
+        public Materia(int id, string descripcion, int hsSemanales, int hsTotales, int idPlan)
         {
-            SetId(id);
-            SetNombre(nombre);
-            SetCodigo(codigo);
-            SetCreditos(creditos);
+            SetID(id);
+            SetDescripcion(descripcion);
+            SetHSSemanales(hsSemanales);
+            SetHSTotales(hsTotales);
+            SetIDPlan(idPlan);
         }
 
-        public void SetId(int id)
+        public void SetID(int id)
         {
             if (id < 0)
-                throw new ArgumentException("El Id debe ser mayor que 0.", nameof(id));
-            Id = id;
+                throw new ArgumentException("El ID debe ser mayor o igual a 0.", nameof(id));
+            ID = id;
         }
 
-        public void SetNombre(string nombre)
+        public void SetDescripcion(string descripcion)
         {
-            if (string.IsNullOrWhiteSpace(nombre))
-                throw new ArgumentException("El nombre no puede ser nulo o vacío.", nameof(nombre));
-            Nombre = nombre;
+            if (string.IsNullOrWhiteSpace(descripcion))
+                throw new ArgumentException("La descripción no puede ser nula o vacía.", nameof(descripcion));
+            Descripcion = descripcion;
         }
 
-        public void SetCodigo(string codigo)
+        public void SetHSSemanales(int hsSemanales)
         {
-            if (string.IsNullOrWhiteSpace(codigo))
-                throw new ArgumentException("El código no puede ser nulo o vacío.", nameof(codigo));
-            Codigo = codigo;
+            if (hsSemanales < 0)
+                throw new ArgumentException("Las horas semanales deben ser mayores o iguales a 0.", nameof(hsSemanales));
+            HSSemanales = hsSemanales;
         }
 
-        public void SetCreditos(int creditos)
+        public void SetHSTotales(int hsTotales)
         {
-            if (creditos < 0)
-                throw new ArgumentException("Los créditos deben ser mayores o iguales a 0.", nameof(creditos));
-            Creditos = creditos;
+            if (hsTotales < 0)
+                throw new ArgumentException("Las horas totales deben ser mayores o iguales a 0.", nameof(hsTotales));
+            HSTotales = hsTotales;
+        }
+
+        public void SetIDPlan(int idPlan)
+        {
+            if (idPlan < 0)
+                throw new ArgumentException("El ID de plan debe ser mayor o igual a 0.", nameof(idPlan));
+            IDPlan = idPlan;
         }
     }
 }

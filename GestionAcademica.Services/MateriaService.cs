@@ -7,19 +7,21 @@ using System.Threading.Tasks;
 using GestionAcademica.Domain;
 using GestionAcademica.DataAccess;
 
+
+
 namespace GestionAcademica.Services
 {
     public class MateriaService
     {
         public void Add(Materia materia)
         {
-            materia.SetId(GetNextId());
+            materia.SetID(GetNextId());
             MateriaInMemory.Materias.Add(materia);
         }
 
         public bool Delete(int id)
         {
-            Materia? materiaToDelete = MateriaInMemory.Materias.Find(x => x.Id == id);
+            Materia? materiaToDelete = MateriaInMemory.Materias.Find(x => x.ID == id);
 
             if (materiaToDelete != null)
             {
@@ -34,7 +36,7 @@ namespace GestionAcademica.Services
 
         public Materia? Get(int id)
         {
-            return MateriaInMemory.Materias.Find(x => x.Id == id);
+            return MateriaInMemory.Materias.Find(x => x.ID == id);
         }
 
         public IEnumerable<Materia> GetAll()
@@ -44,13 +46,14 @@ namespace GestionAcademica.Services
 
         public bool Update(Materia materia)
         {
-            Materia? materiaToUpdate = MateriaInMemory.Materias.Find(x => x.Id == materia.Id);
+            Materia? materiaToUpdate = MateriaInMemory.Materias.Find(x => x.ID == materia.ID);
 
             if (materiaToUpdate != null)
             {
-                materiaToUpdate.SetNombre(materia.Nombre);
-                materiaToUpdate.SetCodigo(materia.Codigo);
-                materiaToUpdate.SetCreditos(materia.Creditos);
+                materiaToUpdate.SetDescripcion(materia.Descripcion);
+                materiaToUpdate.SetHSSemanales(materia.HSSemanales);
+                materiaToUpdate.SetHSTotales(materia.HSTotales);
+                materiaToUpdate.SetIDPlan(materia.IDPlan);
 
                 return true;
             }
@@ -66,7 +69,7 @@ namespace GestionAcademica.Services
 
             if (MateriaInMemory.Materias.Count > 0)
             {
-                nextId = MateriaInMemory.Materias.Max(x => x.Id) + 1;
+                nextId = MateriaInMemory.Materias.Max(x => x.ID) + 1;
             }
             else
             {
@@ -77,3 +80,4 @@ namespace GestionAcademica.Services
         }
     }
 }
+

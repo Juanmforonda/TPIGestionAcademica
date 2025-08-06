@@ -11,10 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\GestionAcademica.Domain\GestionAcademica.Domain.csproj" />
     <ProjectReference Include="..\GestionAcademica.DTOs\GestionAcademica.DTOs.csproj" />
     <ProjectReference Include="..\GestionAcademica.Services\GestionAcademica.Services.csproj" />
