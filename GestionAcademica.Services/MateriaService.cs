@@ -13,26 +13,50 @@ namespace GestionAcademica.Services
 {
     public class MateriaService
     {
-        public void Add(Materia materia)
+
+        public bool Save(Materia materia)
         {
-            materia.SetID(GetNextId());
-            MateriaInMemory.Materias.Add(materia);
+            switch (materia.State)
+            {
+                case States.New:
+                    materia.ID = GetNextId();
+                    MateriaInMemory.Materias.Add(materia);
+                    break;
+                case States.Deleted:
+
+                    if (materia != null)
+                    {
+                        MateriaInMemory.Materias.Remove(materia);
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                    break;
+                case States.Modified:
+                    Materia? materiaToUpdate = MateriaInMemory.Materias.Find(x => x.ID == materia.ID);
+
+                    if (materiaToUpdate != null)
+                    {
+                        materiaToUpdate.SetDescripcion(materia.Descripcion);
+                        materiaToUpdate.SetHSSemanales(materia.HSSemanales);
+                        materiaToUpdate.SetHSTotales(materia.HSTotales);
+                        materiaToUpdate.SetIDPlan(materia.IDPlan);
+
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                    break;
+
+            }
+            materia.State = States.Unmodified;
+            return true;
+        
         }
 
-        public bool Delete(int id)
-        {
-            Materia? materiaToDelete = MateriaInMemory.Materias.Find(x => x.ID == id);
 
-            if (materiaToDelete != null)
-            {
-                MateriaInMemory.Materias.Remove(materiaToDelete);
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
 
         public Materia? Get(int id)
         {
@@ -44,24 +68,7 @@ namespace GestionAcademica.Services
             return MateriaInMemory.Materias.ToList();
         }
 
-        public bool Update(Materia materia)
-        {
-            Materia? materiaToUpdate = MateriaInMemory.Materias.Find(x => x.ID == materia.ID);
 
-            if (materiaToUpdate != null)
-            {
-                materiaToUpdate.SetDescripcion(materia.Descripcion);
-                materiaToUpdate.SetHSSemanales(materia.HSSemanales);
-                materiaToUpdate.SetHSTotales(materia.HSTotales);
-                materiaToUpdate.SetIDPlan(materia.IDPlan);
-
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
 
         private static int GetNextId()
         {

@@ -5,26 +5,50 @@ namespace GestionAcademica.Services
 {
     public class UsuarioService
     {
-        public void Add(Usuario usuario)
+
+        public bool Save(Usuario usuario)
         {
-            usuario.SetID(GetNextId());
-            UsuarioInMemory.Usuarios.Add(usuario);
+            switch (usuario.State)
+            {
+                case States.New:
+                    usuario.ID = GetNextId();
+                    UsuarioInMemory.Usuarios.Add(usuario);
+                    break;
+                case States.Deleted:
+
+                    if (usuario != null)
+                    {
+                        UsuarioInMemory.Usuarios.Remove(usuario);
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                    break;
+                case States.Modified:
+                    Usuario? usuarioToUpdate = UsuarioInMemory.Usuarios.Find(x => x.ID == usuario.ID);
+
+                    if (usuarioToUpdate != null)
+                    {
+                        usuarioToUpdate.SetClave(usuario.Clave);
+                        usuarioToUpdate.SetEmail(usuario.Email);
+                        usuarioToUpdate.SetNombre(usuario.Nombre);
+                        usuarioToUpdate.SetApellido(usuario.Apellido);
+                        usuarioToUpdate.SetNombreUsuario(usuario.NombreUsuario);
+                        usuarioToUpdate.SetHabilitado(usuario.Habilitado);
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                        break;
+
+            }
+            usuario.State = States.Unmodified;
+            return true;
         }
 
-        public bool Delete(int id)
-        {
-            Usuario? usuarioToDelete = UsuarioInMemory.Usuarios.Find(x => x.ID == id);
 
-            if (usuarioToDelete != null)
-            {
-                UsuarioInMemory.Usuarios.Remove(usuarioToDelete);
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
 
         public Usuario? Get(int id)
         {
@@ -36,26 +60,6 @@ namespace GestionAcademica.Services
             return UsuarioInMemory.Usuarios.ToList();
         }
 
-        public bool Update(Usuario usuario)
-        {
-            Usuario? usuarioToUpdate = UsuarioInMemory.Usuarios.Find(x => x.ID == usuario.ID);
-
-            if (usuarioToUpdate != null)
-            {
-                usuarioToUpdate.SetClave(usuario.Clave);
-                usuarioToUpdate.SetEmail(usuario.Email);
-                usuarioToUpdate.SetNombre(usuario.Nombre);
-                usuarioToUpdate.SetApellido(usuario.Apellido);
-                usuarioToUpdate.SetNombreUsuario(usuario.NombreUsuario);
-                usuarioToUpdate.SetHabilitado(usuario.Habilitado);
-
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
 
         private static int GetNextId()
         {

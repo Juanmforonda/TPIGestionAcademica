@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using GestionAcademica.Services;
 using GestionAcademica.DTOs;
 using GestionAcademica.Domain;
+using GestionAcademica.DataAccess;
 
 namespace GestionAcademica.WebAPI.Controllers
 {
@@ -54,7 +55,8 @@ namespace GestionAcademica.WebAPI.Controllers
             try
             {
                 var usuario = new Usuario(dto.ID, dto.Clave, dto.Email, dto.Nombre, dto.Apellido, dto.NombreUsuario, dto.Habilitado);
-                _usuarioService.Add(usuario);
+                usuario.State = States.New;
+                _usuarioService.Save(usuario);
 
                 dto.ID = usuario.ID;
                 return CreatedAtAction(nameof(Get), new { id = dto.ID }, dto);
@@ -71,7 +73,9 @@ namespace GestionAcademica.WebAPI.Controllers
             try
             {
                 var usuario = new Usuario(dto.ID, dto.Clave, dto.Email, dto.Nombre, dto.Apellido, dto.NombreUsuario, dto.Habilitado);
-                var updated = _usuarioService.Update(usuario);
+                
+                usuario.State = States.Modified;
+                var updated = _usuarioService.Save(usuario);
                 if (!updated)
                     return NotFound();
                 return NoContent();
@@ -85,7 +89,9 @@ namespace GestionAcademica.WebAPI.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var deleted = _usuarioService.Delete(id);
+            var usuarioToDelete = UsuarioInMemory.Usuarios.Find(x => x.ID == id);
+            usuarioToDelete.State = States.Deleted;
+            var deleted = _usuarioService.Save(usuarioToDelete);
             if (!deleted)
                 return NotFound();
             return NoContent();

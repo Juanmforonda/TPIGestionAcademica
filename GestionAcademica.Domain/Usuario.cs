@@ -1,8 +1,7 @@
 namespace GestionAcademica.Domain
 {
-    public class Usuario
+    public class Usuario : BusinessEntity
     {
-        public int ID { get; private set; }
         public string Clave { get; private set; }
         public string Email { get; private set; }
         public string Nombre { get; private set; }
@@ -12,7 +11,7 @@ namespace GestionAcademica.Domain
 
         public Usuario(int id, string clave, string email, string nombre, string apellido, string nombreUsuario, bool habilitado)
         {
-            SetID(id);
+            ID = id;
             SetClave(clave);
             SetEmail(email);
             SetNombre(nombre);
@@ -21,12 +20,6 @@ namespace GestionAcademica.Domain
             SetHabilitado(habilitado);
         }
 
-        public void SetID(int id)
-        {
-            if (id < 0)
-                throw new ArgumentException("El ID debe ser mayor o igual a 0.", nameof(id));
-            ID = id;
-        }
 
         public void SetClave(string clave)
         {

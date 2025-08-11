@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace GestionAcademica.Domain
 {
-    public class Materia
+    public class Materia : BusinessEntity
     {
-        public int ID { get; private set; }
         public string Descripcion { get; private set; }
         public int HSSemanales { get; private set; }
         public int HSTotales { get; private set; }
@@ -16,19 +15,13 @@ namespace GestionAcademica.Domain
 
         public Materia(int id, string descripcion, int hsSemanales, int hsTotales, int idPlan)
         {
-            SetID(id);
+            ID = id;
             SetDescripcion(descripcion);
             SetHSSemanales(hsSemanales);
             SetHSTotales(hsTotales);
             SetIDPlan(idPlan);
         }
 
-        public void SetID(int id)
-        {
-            if (id < 0)
-                throw new ArgumentException("El ID debe ser mayor o igual a 0.", nameof(id));
-            ID = id;
-        }
 
         public void SetDescripcion(string descripcion)
         {

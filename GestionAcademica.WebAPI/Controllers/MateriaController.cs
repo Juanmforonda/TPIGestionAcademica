@@ -1,4 +1,5 @@
-﻿using GestionAcademica.Domain;
+﻿using GestionAcademica.DataAccess;
+using GestionAcademica.Domain;
 using GestionAcademica.DTOs;
 using GestionAcademica.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -50,7 +51,8 @@ namespace GestionAcademica.WebAPI.Controllers
             try
             {
                 var materia = new Materia(dto.ID, dto.Descripcion, dto.HSSemanales, dto.HSTotales, dto.IDPlan);
-                _materiaService.Add(materia);
+                materia.State = States.New;
+                _materiaService.Save(materia);
 
                 dto.ID = materia.ID;
                 return CreatedAtAction(nameof(Get), new { id = dto.ID }, dto);
@@ -67,7 +69,8 @@ namespace GestionAcademica.WebAPI.Controllers
             try
             {
                 var materia = new Materia(dto.ID, dto.Descripcion, dto.HSSemanales, dto.HSTotales, dto.IDPlan);
-                var updated = _materiaService.Update(materia);
+                materia.State = States.Modified;
+                var updated = _materiaService.Save(materia);
                 if (!updated)
                     return NotFound();
                 return NoContent();
@@ -81,7 +84,9 @@ namespace GestionAcademica.WebAPI.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var deleted = _materiaService.Delete(id);
+            var materiaToDelete = MateriaInMemory.Materias.Find(x => x.ID == id);
+            materiaToDelete.State = States.Deleted;
+            var deleted = _materiaService.Save(materiaToDelete);
             if (!deleted)
                 return NotFound();
             return NoContent();
